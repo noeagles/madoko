@@ -1,0 +1,61 @@
+Title         : Homework 11.29
+Author        : Akiyama Yukari
+Logo          : True
+
+[TITLE]
+
+9.11. Refer to **Job Proficiency** Problem 9.10.
+
+a. Using only first-order terms fro the predictor variables in the pool of potential X variables, find the four best subset regression models according to the R^2^~a,p~ criterion.
+b. Since there is relatively little difference in R^2^~a,p~ for the four best subset models, what other criteria would you use to help in the selection of the best model? Discuss.
+
+Solution:
+
+a. Under such conditions, there would be in total 16 models. The table of X variables in model and its R^2^~a,p~ is as following:
+~ Table
+|X Variables            |p |R^2^~a,p~  |
+|-----------------------|- |-----------|
+|None                   |1 | 0         |
+|X~1~                   |2 | 0.2326    |
+|X~2~                   |2 | 0.2142762 |
+|X~3~                   |2 | 0.7962344 |
+|X~4~                   |2 | 0.745217  |
+|X~1~, X~2~             |3 | 0.4154853 |
+|X~1~, X~3~             |3 | 0.9269043 |
+|X~1~, X~4~             |3 | 0.7984716 |
+|X~2~, X~3~             |3 | 0.7884436 |
+|X~2~, X~4~             |3 | 0.7635916 |
+|X~3~, X~4~             |3 | 0.8660988 |
+|X~1~, X~2~, X~3~       |4 | 0.9246779 |
+|X~1~, X~2~, X~4~       |4 | 0.8232664 |
+|X~1~, X~3~, X~4~       |4 | 0.9560482 |
+|X~2~, X~3~, X~4~       |4 | 0.8616797 |
+|X~1~, X~2~, X~3~, X~4~ |5 | 0.9554702 |
+~
+As we can see, according to the R^2^~a,p~ criterion, model Y = &minus;127.59569 + 0.34846X~1~ + 1.82321X~3~, Y = &minus;127.77378 + 0.34813X~2~ + 0.04353X~3~ + 1.77921X~3~, Y = &minus;124.20002 + 0.29633X~1~ + 1.35697X~3~ + 0.51742X~4~ and Y = &minus;124.38182 + 0.29573X~1~ + 0.04829X~2~ + 1.30601X~3~ + 0.51982X~4~ are the four best subset regression models.
+b. PRESS~p~, AIC~p~ and the number of predictor variables in the model.
+
+9.18. Refer to **Job proficiency** Problems 9.10 and 9.11.
+
+a. Using forward stepwise regression, fin the best subset of predictor variables to predict job proficiency. Use &alpha; limits of .05 and .10 for adding or deleting a variable, respectively.
+b. How does the best subset according to forward stepwise regression compare with the best subset according to the R^2^~a,p~ criterion in Problem 9.11a.
+
+Solution:
+
+a. By doing the iteration manually, we obtain the model to be : Y = -124.2002 + 0.29633X~1~ + 1.35697X~3~ + 0.51742X~4~
+b. It is the same subset that has highest R^2^~a,p~ in Problem 9.11a.
+
+
+9.22. Refer to **Job proficiency** Problems 9.10 and 9.18. To asses externally the validity of the regression model identified in Problem 9.18, 25 additional applicants for entry-level clerical positions in the agency were similarly tested and hired irrespective of their test scores. The data follow.
+
+a. Fit the regression model identified in Problem 9.18a to the validation data set. Compare the estimated regression coefficients and their estimated deviations to those obtained in Problem 9.18a. Also compare the error mean square and coefficient of multiple determination. Do the estimates for validation data set appear to be reasonably similar to those obtained for the model-building data set?
+b. Calculate the mean square prediction error in (9.20) and compare it to MSE obtained from the model-building data set. Is there evidence of a substantial bias problem in MSE here?
+
+Solution:
+
+a. The new estimated model is: Y = -122.76705 + 0.31238X~1~ + 1.40676X~3~ + 0.428383X~4~. The MSE is 15.41814 and the adjusted R-Squared is 0.9416. Yes, they are reasonably similar to each other.
+b. MSPR = 15.70972 and MSE obtained from model-building data set is 13.92788.
+
+
+
+
