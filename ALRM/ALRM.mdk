@@ -1,0 +1,20 @@
+Title         : Homework 12.6
+Author        : Akiyama Yukari
+Logo          : True
+
+[TITLE]
+
+10.9. Refer to **Brand preference** Problem 6.5
+
+a. Obtain the studentized deleted residuals and identify any outlying Y observations. Use the Bonferroni outlier test procedure with &alpha; = .10. State the decision rule and conclusion.
+b. Obtain the diagonal elements of the hat matrix, and provide an explanation for the pattern in these elements.
+c. Are any of the observations outlying with regard to their X values according to the rule of thumb stated in the chapter.
+
+Solution:
+a. 
+~ Math
+t_i = \frac{d_i}{s\{d_i\}} = \frac{e_i \sqrt{n - p - 1}}{\sqrt{SSE (1 - h_ii) - e_i^2}}
+~
+
+
+
