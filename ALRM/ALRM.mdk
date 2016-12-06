@@ -9,12 +9,67 @@ Logo          : True
 a. Obtain the studentized deleted residuals and identify any outlying Y observations. Use the Bonferroni outlier test procedure with &alpha; = .10. State the decision rule and conclusion.
 b. Obtain the diagonal elements of the hat matrix, and provide an explanation for the pattern in these elements.
 c. Are any of the observations outlying with regard to their X values according to the rule of thumb stated in the chapter.
+d. Calculate Cook's distance D~i~ for each case and prepare an index plot. Are any cases influential according to this measure?
 
 Solution:
-a. 
+
+a. studentized deleted residuals are, by definition:
 ~ Math
-t_i = \frac{d_i}{s\{d_i\}} = \frac{e_i \sqrt{n - p - 1}}{\sqrt{SSE (1 - h_ii) - e_i^2}}
+t_i = \frac{d_i}{s\{d_i\}} = \frac{e_i \sqrt{n - p - 1}}{\sqrt{SSE (1 - h_ii) - e_i^2}}.
+~
+The results are:
+-0.04085498, 0.06128781, -1.36059879, 1.38602483, -0.36694571, -0.66490618, -0.76716157, 0.50461264,  0.46506694, -0.60436295, 1.82302030, 0.97784298, -1.13966417, -2.10272640, 1.48973208, 0.24572878. 
+And using the Bonferroni outlier test procedure, the decision rule would be:
+~ Math
+\text{ Outlier if  } | t_i | > t(1 - \frac{0.10}{32}, n - p - 1)
+~
+Conclusion: No outlying Y observations.
+b. The diagonal elements are: 0.2375, 0.2375, 0.2375, 0.2375, 0.1375, 0.1375, 0.1375, 0.1375, 0.1375, 0.1375, 0.1375, 0.1375, 0.2375, 0.2375, 0.2375, 0.2375. One possible explanation: the samples were from 3 different groups.
+c. The rule of thumb would be outlying X values if the leverage values are large:
+~ Math
+h_{ii} > \frac{2 \times 3}{16}
+~
+However, there are no such values.
+d. Cook's distances, by definition, are: 
+~ Math
+D_i = \frac{h_{ii}}{p(1-h_{ii})}\tilde{e_i}^2
+~ 
+And the results, calculated by function ```cooks.distance```, are: 0.0001877130, 0.0004223542, 0.1803921815, 0.1862582123, 0.0076655286, 0.0245466787, 0.0322971439, 0.0143542862, 0.0122308711, 0.0204060192, 0.1498281704, 0.0509831969, 0.1318214458,  0.3634123447, 0.2106609008, 0.0067576676.
+The plot is:
+~ Center
+![Cook]
+~
+There are no cases influential according to this measure.
+
+[Cook]: images/Cook.jpeg "Cook" { width:auto; max-width:90% }
+
+
+10.13. **Cosmetics sales.** An assistant in the district sales office of a national cosmetics firm obtained data, shown below, on advertising expenditures and sales last year in the district's 44 territories. X~1~ denote expenditures for point-of-sales displays in beauty salons and department stores (in thousand dollars), and X~2~ and X~3~ represent the corresponding expenditure for local media advertising and prorated share of national media advertising, respectively. Y denote sales (in thousand cases). The assistant was instructed to estimate the increase in expected sales when X~1~ is increased by 1 thousand dollars and X~2~ and X~3~ are held constant and was told to use an ordinary multiple regression model with linear terms for the predictor variables and with independent normal error terms.
+~ Center
+|i:     |1     |2     |3     | ... |42    |43    |44    |
+|-------|------|------|------|-----|------|------|------|
+|X~i1~: |5.6   |4.1   |3.7   | ... |3.6   |3.9   |5.5   |
+|X~i2~: |5.6   |4.8   |3.5   |...  |3.7   |3.6   |5.0   |
+|Y~i~:  |12.85 |11.55 |12.78 |...  |10.47 |11.03 |12.31 |
 ~
 
+a. State the regression model to be employed and fit it to the model.
+b. Test whether there is a regression relation between sales and the three predictor variables; use &alpha; = .05. State the alternatives, decision rule, and conclusion.
+c. Test for each of regression coefficients &beta;~k~ (k = 1, 2, 3) individually whether or not &beta;~k~ = 0; use &alpha; = .05 each time. Do the conclusions of these tests correspond to that obtained in part (b)?
 
-
+Solution:
+a. The regression model would be:
+~ Math
+Y_i = \beta_0 + \beta_1 X_{i1} + \beta_2 X_{i2} + \beta_3 X_{i3} + \varepsilon_i 
+~
+where $\varepsilon_i	\sim N(0, \sigma)$.
+And the fitted model would be:
+~ Math
+Y_i = 1.0233 + 0.9657 X_{i1} + 0.6292 X_{i2} + 0.6760 X_{i3} 
+~
+b. Alternatives: not all &beta;~k~ = 0; decision rule: reject H~0~ if p-vlaue < &alpha; = .05. Using general linear approach, we come to the conclusion: not all &beta;~k~ = 0.
+c. Doing so, we find the each time we come to the conclusion that &beta;~k~ = 0. It does, however, correspond to the results we obtained in part (b), for there is serious multicollinearity problem here. The correlation plot is:
+~ Center
+![corrplot]
+~
+[corrplot]: images/corrplot.jpeg "corrplot" { width:auto; max-width:90% }
