@@ -1,0 +1,47 @@
+Title         : Homework11.30
+Author        : Akiyama Yukari
+Logo          : True
+
+[TITLE]
+
+#Mental Health
+
+
+Refer to Problem 10.32.
+
+13.29. Estimate the OR relating widowhood to mortality based on all the data in Table 10.28.
+
+13.30. Provide a 95% CI for the OR.
+
+Solution:
+
+a. The Table 10.28 is as follows:
+~ Center
+|------------|------|------|------| ------|
+|            |      |Male  |      |Female |
+|------------|------|------|------| ------|
+| age(years) | n~1~ | n~2~ | n~1~ | n~2~  |
+|------------|------|------|------| ------|
+| 36~45      | 4    | 8    | 3    | 2     |
+| 46~55      | 20   | 17   | 17   | 10    |
+| 56~65      | 42   | 26   | 16   | 15    |
+| 66~75      | 21   | 10   | 18   | 11    |
+| unknown    | 0    | 2    | 3    | 2     |
+| Total      | 87   | 63   | 57   | 40    |
+|------------|------|------|------|-------|
+{  }
+~
+There are two confounding variables, age(years) and gender(Male and Female). To test whether an overall estimated OR can be obtained, we use the Mantel-Haenszel test. 
+
+
+
+
+
+
+# Renal Disease
+
+Refer to Data Set NEPHRO.DAT on the Companion Website.
+
+13.34. Use methods of meta-analysis to assess whether
+there are differences in nephrotoxicity between each pair of antibiotics. Obtain point estimates and 95% CIs for the OR, and provide a two-sided p-value.
+
