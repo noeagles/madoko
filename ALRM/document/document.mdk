@@ -1,0 +1,19 @@
+Title         : Homework12.13
+Author        : Akiyama Yukari
+Logo          : True
+
+[TITLE]
+
+11.6. **Computer-assisted learning.** Data from a study of computer-assisted learning by 12 students, showing the total number of responses in completing a lesson (X) and the cost of computer time (Y, in cents), follow.
+~ Center
+|i: |1  |2  |3  |4  |5  |6  |7  |8  |9  |10 |11 |12 |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+|X: |16 |14 |22 |10 |14 |17 |10 |13 |19 |12 |18 |11 |
+|Y: |77 |70 |85 |50 |62 |70 |55 |63 |88 |57 |81 |51 |
+~
+
+a. Fit a linear regression function by ordinary least squares, obtain the residuals, and plot the residuals against X. What does the residual plot suggest?
+b. Estimate the standard deviation function by regressing the absolute values of the residuals against X, and then calculate the estimated weight for each case using (11.16a). Which case receives the largest weight? Which case receives the smallest weight?
+c. Using the estimated weights, obtain the weighted least squares estimates of &beta;~0~ and &beta;~1~. Are these estimates similar to the ones obtained with ordinary least squares in part(a)?
+
+Solution:
