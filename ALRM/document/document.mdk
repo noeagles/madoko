@@ -1,6 +1,6 @@
 Title         : Homework12.13
 Author        : Akiyama Yukari
-Logo          : True
+Logo          : FALSE
 
 [TITLE]
 
@@ -17,3 +17,25 @@ b. Estimate the standard deviation function by regressing the absolute values of
 c. Using the estimated weights, obtain the weighted least squares estimates of &beta;~0~ and &beta;~1~. Are these estimates similar to the ones obtained with ordinary least squares in part(a)?
 
 Solution:
+
+a. Fit the data by $Y = \beta_0 + \beta_1 X$, and we obtain the result:
+~ Math
+Y = 19.4727 + 3.2689 X.
+~
+The residuals are: 5.224790, 4.762605, -6.388655, -2.161765, -3.237395, -5.044118, 2.838235, 1.031513, 6.418067, -1.699580, 2.686975, -4.430672. And the plot is as following:
+~ Center
+![Res_X_Plot]
+[Res_X_Plot]: images/Res_X_Plot.jpeg "Res_X_Plot" { width:auto; max-width:90% }
+~ 
+The residual plot suggests that the variance of the error term may be a function of X; or the we should apply a second-order model.
+b. The standard deviation function would be
+~ Math
+s_i = -0.9049 + 0.3226 X_i .
+~
+And w~i~, by definition, is $w_i = \frac{1}{(S_i)^2}$. The values of w~i~ are: 0.05517614 0.07665099 0.02607360 0.18556213 0.07665099 0.04767612 0.18556213 0.09242488 0.03662794 0.11362048 0.04160751 0.14304022. Case 4,7 recive the largest weight while case 3 recives the smallest weight.
+c. The weighted regression function is
+~ Math
+Y = 17.3006 + 3.4211 X.
+~
+The estimates of &beta;~0~ and &beta;~1~ are 17.3006 and 3.4211 respectively, and they are not similar to those estimated in part (a).
+
