@@ -1,0 +1,38 @@
+Title         : Welcome
+Author        : You
+Logo          : True
+
+[TITLE]
+Refer to Table 13.8.
+
+13.9 Perform a signicance test to examine the association between OC use and bacteriuria after controlling for age.
+
+13.10 Estimate the OR in favor of bacteriuria for OC users vs. non-OC users after controlling for age.
+
+13.11 Provide a 95% CI for the OR estimate in Problem 13.10.
+
+Solution:
+
+a. H~0~: p~i,1~=p~i,2~, i=1, 2, 3, 4. against all alternativs. The statistic would be:
+~ Math
+\chi_{MH}^2 = \frac{(|O - E| - 0.5)^2}{V},
+~
+and $\chi_{MH}^2$ ~ $\chi_{1}^2$ under H~0~. Insert values, we have $\chi_{MH}^2 = 1.860287$. The power of test is 0.1153889.
+b. Assuming that the underlying OR is the same fro each stratum, we obtain an esitmate of the common underlying PR by
+~ Math
+\widehat{OR_{MH}} = \frac{\sum{a_i d_i / n_i}}{\sum{b_i c_i / n_i}}.
+~ 
+Insert values, we have $\widehat{OR_{MH}} = 1.417813$.
+c. That interval would be
+~ Math
+(0.8890881, 2.260962)
+~
+d. However, the homogeneity may not hold for ORs.
+~ Math
+H_0 : OR_1 = OR_2 = OR_3 = OR_4 \text{against all alternatives.}
+~
+The test Statistic would be
+~ Math
+\chi_{HOM}^2 = \sum{w_i (ln\widehat{OR_{i}})^2} - \frac{(\sum{w_i (ln\widehat{OR_{i}})})^2}{\sum{w_i}} \text{.}
+~
+Insert with values, we have $\chi_{HOM}^2 = 11.17425$. H_0 is rejected.
