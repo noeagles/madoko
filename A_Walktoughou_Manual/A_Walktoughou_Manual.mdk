@@ -1,0 +1,41 @@
+Title         : A Quick Though Manual Of Statistical Inferences
+
+Author        : Akiyama Yukari
+Affiliation   : Oarai Panzer Fulagu
+Email         : lijzh29@mail2.sysu.edu.cn
+
+Bibliography  : example.bib
+
+[INCLUDE=book]
+[INCLUDE=webtoc]
+[INCLUDE=webanchors]
+
+[TITLE]
+
+~ Begin SidePanel
+[TOC]
+~ End SidePanel
+
+~ Begin MainPanel
+
+#Preface {-}
+
+  This manual is more like a review material rather than a self-study textbook, and for readers who want to learn statistical inferences from ground zero, I highly recommend the book *Introduction to Mathematical Statistics*, which is what this manual based on.
+
+#Introduction
+
+  Statistical inferences given in the book  *Introduction to Mathematical Statistics* can be classed into three types:
+
+a. Point Estimation
+b. Confidence Intervals
+c. Tests of Statistical Hypotheses.
+
+Although they deal with different problems that we intend to give solutions, there is strong connection between them. We will get to that as we go though the following chapters.
+
+#Point Estimation
+
+A widely used method in point estimation is the Maximum Likelihood Method, where we will consider samples as random variables (r.v.). Then the joint p.d.f of samples, denoted by X~1~, X~2~, ... ,X~n~ where n is a fixed constant, would be:
+
+
+
+~ End MainPanel
