@@ -1,0 +1,77 @@
+Title         : 复杂数据分析作业2.23
+Author        : Akiyama
+Logo          : True
+Package       : ctex
+
+[TITLE]
+
+#散点图:
+![Rplot]
+
+[Rplot]: images/Rplot.png "Rplot" { width:auto; max-width:90% }
+
+
+#习题1.7
+
+以欺诈检测为例，某一笔消费可以认为信用卡盗刷（即与正常使用行为不同的离群点）可以从一下两个方面入手
+：
+
+* 该笔消费的额度巨大，远超于平常消费金额
+* 该笔消费发生在异地（往往是国外）
+
+#习题2.4
+
+R Language代码如下：
+
+```
+library(car)
+age <- c(23,23,27,27,39,41,47,49,50,52,54,54,56,57,58,58,60,61)
+fat <- c(9.5,26.5,7.8,17.8,31.4,25.9,27.4,27.2,31.2,34.6,42.5,28.8,33.4,30.2,34.1,32.9,42.1,35.7)
+mean(age)
+mean(fat)
+median(age)
+median(fat)
+var(age)^.5
+var(fat)^.5
+boxplot(age, main= "Age Boxplot")
+boxplot(fat, main= "Fat Boxplot")
+scatterplot(age~fat)
+qqplot(fat,age)
+```
+
+(1)Age的均值,中位数,标准差分别为: 46.44444, 51, 13.21862; Fat的均值,中位数,标准差分别为：28.83333, 30.7, 9.327568.
+
+(2)Boxplot如下
+
+![Rplot01]
+
+[Rplot01]: images/Rplot01.png "Rplot01" { width:auto; max-width:90% }
+![Rplot02]
+
+[Rplot02]: images/Rplot02.png "Rplot02" { width:auto; max-width:90% }
+
+(3)Scatterplot及qqplot如下
+
+![Rplot03]
+
+[Rplot03]: images/Rplot03.png "Rplot03" { width:auto; max-width:90% }
+![Rplot04]
+
+[Rplot04]: images/Rplot04.png "Rplot04" { width:auto; max-width:90% }
+
+#习题2.6
+
+计算代码如下
+
+```
+> a <- c(22,1,42,10) ##初始化向量
+> b <- c(20,0,36,8)
+> sum((a-b)^2)^0.5 ##欧几里得距离
+[1] 6.708204
+> sum(abs(a-b)) ##曼哈顿距离
+[1] 11
+> sum(abs(a-b)^3)^(1/3) ##q=3的闵可夫斯基距离
+[1] 6.153449
+> max(abs(a-b)) ##切比雪夫距离
+[1] 6
+```
