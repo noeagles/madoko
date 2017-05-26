@@ -1,0 +1,167 @@
+[INCLUDE=style/ieee]
+Title         : A Survival Analysis Report On The BLAC Dataset
+Author        : Li Juzheng
+Affiliation   : Department of Applied Statistics, Sun Yat-Sen University
+Email         : lijzh29@mail2.sysu.edu.cn
+
+[TITLE]
+
+~ Abstract
+We carried a data analysis on the BLAC dataset in hoping to recognize the important variables that have significant influence on the conditions on the subjects. The analysis is of three sections: data cleaning, model building and conclusion. Our result shows that among all factors we took into consideration, the X1, X2, X3 are the crucial ones in determining the status of the objects.
+~
+
+# Data Description and Processing
+
+##  Data Description 
+
+BLAC dataset contains 1070 objects who suffered from breast cancer with their informations related to the disease.
+
+The dataset we begun with is a raw one that was obtained via web scraping with a considerable number of missing values and conflict ones; thus we would start the analysis with data cleaning.
+
+## Missing Values Analysis
+
+As in Figure 1, an interesting character of the BLAC data is that it has a lot missing values that may be of following reasons:
+
+* Complete random missing where all variables were measured but some were lost in the first place;
+* All were measured but were lost during the scraping;
+* Some variables will be measured only when the objects in much worser conditions;
+* ETC..
+
+The third scenario would bring extreme difficulties to our analysis, and being lack of domain knowledge we failed to recognize variables that indicates worse conditions when being measured . Besides, even if we could find those variables, we cannot tell whether lacking of such measurements is because of being unnecessary or lacking of proper equipments. Thus it would be a strong prior if we assume that the missing is dependent with the object` status.
+
+With no additional information or domain knowledge, we would assume that the missing is random and independent of the status of objects.
+
+~ Note
+~
+~~  { font-style: italic }
+The occurrence of missing is random, thus independent of objects.
+~~
+
+~ Figure{caption: Missing Map Of the Raw Data}
+![MSM1]
+~
+
+[MSM1]: images/MSM1.png "MSM1" { width:auto; max-width:90% }
+
+## Deleting Variables and Samples
+
+As in Figure 1, many variables were with no values or only a small fraction. Such variables would not help us analyzing even after imputation for with so little information, such variables can damage the accuracy of the imputation. Aside from those, some variables such as id and form completion data are also of no use toward our analysis. Thus, we would delete them for further analysis so that we can focus on more common/generalized variables. Notice that the survival time of some samples are non-positive, we would delete them as well.
+The missing map after is Figure 2.
+
+~ Figure {caption: Missing Map Of the Deleted Data}
+![MSM2]
+
+[MSM2]: images/MSM2.png "MSM2" { width:auto; max-width:90% }
+
+
+~
+
+## Factorization and Imputation
+
+After deleting variables that are seriously missing, a nature idea would be performing an imputation of the rest. We do so via a R package `mice`. However, one must notice that the type of all given data is `float` which is obviously against the fact that many of medical variables are of the `factor` type. So it seems to be a necessary to find and factorize such variables. However, in our analysis, we would perform such a operation for the following reasons:
+
+* For such a lager complex dataset, such operation would not increase the accuracy higher, but make the optimization computational more expensive;
+* Factorization keep us from better imputation;
+* Factors with large inter variance can be treated as continues variables;
+* We are with zero domain knowledge of finding those factors.
+
+Given those considerations, we decide to perform the imputation and later build the model based on without factorization. The missing map after imputation would be Figure 3.
+
+~ Figure {caption: Missing map after imputation, note there were still some mising values and centain modifications on variables names had been made.}
+![MSM4]
+
+[MSM4]: images/MSM4.png "MSM4" { width:auto; max-width:90% }
+
+~
+To deal with the rest samples with missing values, a neutral choice would be delete them. During the process, we found that variable x6, x31, x34 are constant; thus they were deleted.
+
+# Model Building
+
+##Lasso in Cox
+The Cox PH model seems to be the default model in survival analysis and the best one in our case given that we have zero knowledge about of which family the distribution of the survival time is. However, we shall note that even after deleting variables with considerable missing value or constant values over samples, we still have 34 predictor variables to model. See Figure 4 for the correlation plot of those variables. 
+
+Given that, a model/variable selection method should be performed so that we could build a model such that may be able to generalize well and being interpretive at the same time.
+~ Figure{ caption: The corrgarm of the cleaned data}
+![corr]
+[corr]: images/corr.png "corr" { width:auto; max-width:90% }
+~
+
+The Lasso method can be considered as adding a Laplace prior to the parameters or simply a L1 norm of the parameters to the loss function. Either way, it can help us selecting variables by reducing the corresponding coefficient to zero. The Lasso path and Lasso Cross-Validation are shown below in Figure 5.
+
+~ Figure
+![LasooPath]
+
+[LasooPath]: images/LasooPath.png "LasooPath" { width:auto; max-width:90% }
+
+![LassoCv]
+
+[LassoCv]: images/LassoCv.png "LassoCv" { width:auto; max-width:90% }
+
+~
+
+
+By doing so, we could narrow our search to variable x1, x5, x10, x13, x15, x19, x20, x23, x24, x25, x26, x28 and x29. The coefficients obtained by Lasso are shown in the tables below.
+
+
+~ Table
+|----------|---------------|----------|--------------|
+| Variable | Coefficient   | Variable |Coefficient   |
++----------|:--------------|:---------|:-------------+
+| x1       | -7.518491e-05 |x10       |7.709905e-02  |
+| x2       |               |x11       |              |
+| x3       |               |x12       |1.845042e-01  |
+| x4       |               |x13       | 8.030721e-01 |
+| x5       | 3.558035e-03  |x14       |              |
+|          |               |x15       | 1.689648e+00 |
+| x7       |               |x16       |              |
+| x8       |               |x17       |              |
+| x9       |               |x18       |              |
+|----------|---------------|----------|--------------|
+
+|----------|---------------|----------|---------------|
+| Variable | Coefficient   | Variable |Coefficient    |
++----------|:--------------|:---------|:--------------+
+|x19       | -1.284529e-02 | x28      | -4.962278e-01 |
+|x20       |6.645288e-02   | x29      | -2.129156e-02 |
+|x21       |               | x30      |               |
+|x22       |               | x32      |               |
+|x23       | -8.412398e-01 | x33      |               |
+|x24       |-8.894537e-03  |          |               |
+|x25       |3.768855e-02   |          |               |
+|x26       |-1.947332e-03  |          |               |
+|x27       |               |          |               |
+|----------|---------------|----------|---------------|
+~
+
+## Model Fitting, Assumption Evaluating and Repeating
+
+By applying Lasso, we obtain the predictor variables that have the most significant influence on the responses. Now we shall fit a Cox PH model to them and evaluate PH assumption:
+
+~ Equation { #eq-euler }
+
+h(x) = h_
+~
+
+
+The coefficients are:
+
+|-----------|-------------|
+| Variables | Coefficient |
++-----------|:-----------:+
+| X1        | -0.0001     |
+| X5        | 0.0443      |
+| X10       | 0.2561      |
+| X13       | 1.5929      |
+| X15       | 1.9830      |
+| X19       | -0.0561     |
+| X20       | 0.0726      |
+| X23       | -1.2200     |
+| X24       | -0.0156     |
+| X25       | 0.1739      |
+| X26       | -0.0085     |
+| X28       | -0.5729     |
+| X29       | -0.0569     |
+|-----------|-------------|
+{  }
+
+
