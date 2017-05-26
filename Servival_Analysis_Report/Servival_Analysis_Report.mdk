@@ -137,11 +137,6 @@ By doing so, we could narrow our search to variable x1, x5, x10, x13, x15, x19, 
 
 By applying Lasso, we obtain the predictor variables that have the most significant influence on the responses. Now we shall fit a Cox PH model to them and evaluate PH assumption:
 
-~ Equation { #eq-euler }
-
-h(x) = h_
-~
-
 
 The coefficients are:
 
