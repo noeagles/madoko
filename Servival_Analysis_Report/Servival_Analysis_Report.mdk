@@ -7,7 +7,7 @@ Email         : lijzh29@mail2.sysu.edu.cn
 [TITLE]
 
 ~ Abstract
-We carried a data analysis on the BLAC dataset in hoping to recognize the important variables that have significant influence on the conditions on the subjects. The analysis is of three sections: data cleaning, model building and conclusion. Our result shows that among all factors we took into consideration, the X1, X2, X3 are the crucial ones in determining the status of the objects.
+We carried a data analysis on the BLAC dataset in hoping to recognize the important variables that have significant influence on the conditions on the subjects. The analysis is of three sections: data cleaning, model building and conclusion. Our result shows that among all factors we took into consideration, the "history_other_malignancy", "tumor_status", "er_status_by_ihc" are the crucial ones in determining the status of the objects; and that "birth_days_to", out of expectation, has no significant effect.
 ~
 
 # Data Description and Processing
@@ -135,28 +135,99 @@ By doing so, we could narrow our search to variable x1, x5, x10, x13, x15, x19, 
 
 ## Model Fitting, Assumption Evaluating and Repeating
 
-By applying Lasso, we obtain the predictor variables that have the most significant influence on the responses. Now we shall fit a Cox PH model to them and evaluate PH assumption:
+By applying Lasso, we obtain the predictor variables that have the most significant influence on the responses. Now we shall fit a Cox PH model to them and evaluate PH assumption.
 
-
-The coefficients are:
+The Coefficients are:
 
 |-----------|-------------|
-| Variables | Coefficient |
+| Variables | Coefficients    |
 +-----------|:-----------:+
 | X1        | -0.0001     |
-| X5        | 0.0443      |
-| X10       | 0.2561      |
-| X13       | 1.5929      |
-| X15       | 1.9830      |
-| X19       | -0.0561     |
-| X20       | 0.0726      |
-| X23       | -1.2200     |
-| X24       | -0.0156     |
-| X25       | 0.1739      |
-| X26       | -0.0085     |
-| X28       | -0.5729     |
-| X29       | -0.0569     |
+| X5        | 0.0462     |
+| X10       | 0.2381     |
+| X13       | 1.6950     |
+| X15       | 2.0168     |
+| X19       | -0.0473    |
+| X20       | 0.0631     |
+| X23       | -1.3677     |
+| X24       | 0.0757    |
+| X25       | 0.1717     |
+| X26       | -0.0062      |
+| X28       | -0.6035     |
+| X29       | -0.0455     |
 |-----------|-------------|
 {  }
 
+The p-values are:
 
+|-----------|-------------|
+| Variables | P-Values    |
++-----------|:-----------:+
+| X1        | 0.97063     |
+| X5        | 0.56184     |
+| X10       | 0.01361     |
+| X13       | 0.82467     |
+| X15       | 0.40589     |
+| X19       | 0.00843     |
+| X20       | 0.64706     |
+| X23       | 0.51512     |
+| X24       | 0.46565     |
+| X25       | 0.40207     |
+| X26       | 0.94898     |
+| X28       | 0.81864     |
+| X29       | 0.67265     |
+|-----------|-------------|
+{  }
+
+Based on the above results, we choose to exclude out x1, x10, x19, x26 for further model building for two reasons:
+
+* x1 and x26 do not have significant effects on the survival distribution;
+* PH assumption does not hold for x10 and x19; we can take stratum on them, but such a procedure would prevent us from further validations.
+
+Thus we form our final model with the formula:
+~ Equation { }
+y = x_{5} + x_{13} + x_{15} + x_{20} + x_{23} + x_{24} + x_{25} + x_{28} + x_{29}
+~
+
+and the coefficients and p-values for testing PH assumption are:
+
+|-----------|--------------|----------|
+| Variables | Coefficients | P-Values |
++-----------:+------------:+----------+
+| X5        | 0.0460       | 0.400    |
+| X13       | 1.7044       | 0.469    |
+| X15       | 1.8187       | 0.128    |
+| X20       | 0.0644       | 0.415    |
+| X23       | -1.0095      | 0.168    |
+| X24       | -0.0339      | 0.923    |
+| X25       | 0.2852       | 0.474    |
+| X28       | -0.5965      | 0.808    |
+| X29       | -0.0370      | 0.893    |
+|-----------|--------------|----------|
+{  }
+
+~ Figure
+
+![P1]
+
+[P1]: images/P1.jpg "P1" { width:auto; max-width:90% }
+
+![P2]
+
+[P2]: images/P2.jpg "P2" { width:auto; max-width:90% }
+~
+
+~ Figure
+![P3]
+
+[P3]: images/P3.png "P3" { width:auto; max-width:90% }
+
+~
+##Model Validation and Representing
+
+This section can be summarized into three figures. They say "a picture is worth than one thousand words"; thus approximately speaking, there are more than 3,000 words in this section.
+
+
+#Conclusion and Further
+
+Our results show that among all variables we took into consideration, the "history_other_malignancy",   "tumor_status", "er_status_by_ihc" are the crucial ones in determining the status of the objects; and that "birth_days_to", out of expectation, has no significant effect. Lack of the corresponding domain knowledge, we cannot give proper explanations. For a further work, we would like to develop better imputation techniques and deal the missing values in terms of including/excluding variables with more solid evidence. 
