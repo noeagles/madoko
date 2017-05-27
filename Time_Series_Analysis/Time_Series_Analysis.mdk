@@ -1,0 +1,56 @@
+Title         : Time Series Analysis On AirPassengers Dataset
+
+Author        : Li Juzheng
+Affiliation   : School of Mathematics, Sun Yet-Sen University
+Email         : lijzh29@mail2.sysu.edu.cn
+
+Bibliography  : example.bib
+Doc class     : [reprint,nocopyrightspace]style/sigplanconf.cls
+
+[TITLE]
+
+~ Abstract
+In this report, we carried a time series analysis on the AirPassengers dataset. Through a series of analyses and figures, a ARIMA model was built. We also performed a validation of our model.
+~
+
+~ TexRaw
+% any commands necessary for your particular style
+\category{D.2.5}{Software Engineering}{Testing and Debugging}[symbolic execution]
+\terms{Algorithms, Experimentation}
+\keywords{Games for learning, white box testing}
+~
+
+# Exploratory Data Analysis
+
+The dataset AirPassengers consists of monthly totals of international airline passengers, 1949 to 1960, and can be obtained by `data(AirPassengers)` in R. See Figure 1 for details.
+
+~ Figure
+![F1]
+
+[F1]: images/F1.png "F1" { width:auto; max-width:90% }
+
+~ 
+
+
+```
+data(AirPassengers) ##load data
+plot(AirPassengers) ##Figure 1
+```
+
+## Trend, Season and Unequal Variance
+
+It is obvious that the time series is not stationary and is seasonal with trend and unequal variance. To show that we can decompose the time series using `stl(AirPassengers)`. The plot of the decomposition is in Figure 2.
+
+~ Figure
+![F2]
+
+[F2]: images/F2.png "F2" { width:auto; max-width:90% }
+
+~
+
+```
+decomp <- stl(Airpassengers, s.window = "periodic") ##decompose data
+plot(decomp) ##Figure 2
+```
+
+
