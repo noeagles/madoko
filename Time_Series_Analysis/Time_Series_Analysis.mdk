@@ -53,4 +53,16 @@ decomp <- stl(Airpassengers, s.window = "periodic") ##decompose data
 plot(decomp) ##Figure 2
 ```
 
+We can start by remove the seasonal component using `seasadj(decomp)`. The time series after is plotted in Figure 3.
 
+```
+AirP <- seasadj(decomp)
+plot(AirP)
+```
+
+~ Figure
+![F3]
+
+[F3]: images/F3.png "F3" { width:auto; max-width:90% }
+
+~
