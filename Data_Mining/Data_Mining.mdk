@@ -10,10 +10,10 @@ There are 60000 color images of a size of 32&times;32, from 10 classes, 6000 ima
 
 See Figure 1 for a primary understanding.
 
-~ Figure
-![cifar10]
+~ Figure { caption: This Figure is a copy from <https://www.kaggle.com/c/cifar-10>}
+![cifar-10]
 
-[cifar10]: images/cifar10.jpg "cifar10" { width:auto; max-width:50% }
+[cifar-10]: images/cifar-10.png "cifar-10" { width:auto; max-width:90% }
 
 ~ 
 
