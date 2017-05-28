@@ -1,0 +1,28 @@
+Title         : Image Classification Practice On CIFAR-10
+Author        : Li Juzheng
+Logo          : True
+
+[TITLE]
+
+#Dataset
+
+There are 60000 color images of a size of 32&times;32, from 10 classes, 6000 images per class, in the CIFAR-10 dataset. Among them, 50000 images are of the training set while 10000 ones are of the testing set. We can download this dataset in [Alex Krizhevsky](http://www.cs.toronto.edu/~kriz/index.html) or a direct link: <http://www.cs.toronto.edu/~kriz/cifar.html>. Images can only be of one class.
+
+See Figure 1 for a primary understanding.
+
+~ Figure
+![cifar10]
+
+[cifar10]: images/cifar10.jpg "cifar10" { width:auto; max-width:90% }
+
+~ 
+
+More details can be found in this technique report [Learning Multiple Layers of Features from Tiny Images](http://www.cs.toronto.edu/~kriz/learning-features-2009-TR.pdf).
+
+#Classifers
+
+The best classifiers for images so far are mostly built with convolution neural networks where the convolution part functions as a feature extractor implemented by the usage of convolutions or filters and augmented with techniques such as stride, padding, pooling, batchnormalization and etc., capturing the spatial or stationary features from pixels of channels while the dense/fully-connected part serves as a relatively simple classifier that assign images to classes based on the features extracted by the convolution part. However, recently a random forest based deep model was proposed, see [Deep Forest: Towards An Alternative to Deep Neural Networks](https://arxiv.org/pdf/1702.08835.pdf) for details if interested. Although the recent work of *Zhou* is exciting, we will still limit our classifiers within the "traditional" context in this report.
+
+##Considerations when building our convolution based classifier
+
+Is there a universal or general guideline for building deep neural networks? Someone may argue that there is one and it has been found by him, but I hold strong disbelief about this. However, some interesting work has been carried out by *Johnson et al.* in their paper [Inferring and Executing Programs for Visual Reasoning](https://arxiv.org/pdf/1705.03633.pdf).
