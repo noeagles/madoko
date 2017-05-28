@@ -13,7 +13,7 @@ See Figure 1 for a primary understanding.
 ~ Figure
 ![cifar10]
 
-[cifar10]: images/cifar10.jpg "cifar10" { width:auto; max-width:90% }
+[cifar10]: images/cifar10.jpg "cifar10" { width:auto; max-width:50% }
 
 ~ 
 
@@ -21,7 +21,7 @@ More details can be found in this technique report [Learning Multiple Layers of 
 
 #Classifers
 
-The best classifiers for images so far are mostly built with convolution neural networks where the convolution part functions as a feature extractor implemented by the usage of convolutions or filters and augmented with techniques such as stride, padding, pooling, batchnormalization and etc., capturing the spatial or stationary features from pixels of channels while the dense/fully-connected part serves as a relatively simple classifier that assign images to classes based on the features extracted by the convolution part. However, recently a random forest based deep model was proposed, see [Deep Forest: Towards An Alternative to Deep Neural Networks](https://arxiv.org/pdf/1702.08835.pdf) for details if interested. Although the recent work of *Zhou* is exciting, we will still limit our classifiers within the "traditional" context in this report.
+The best classifiers for images so far are mostly built with convolution neural networks where the convolution part functions as a feature extractor implemented by the usage of convolutions or filters and augmented with techniques such as stride, padding, pooling, batchnormalization and etc., capturing the spatial or stationary features from pixels of channels while the dense/fully-connected part serves as a relatively simple classifier that assign images to classes based on the features extracted by the convolution part. However, recently a random forest based deep model was proposed, see [Deep Forest: Towards An Alternative to Deep Neural Networks](https://arxiv.org/pdf/1702.08835.pdf) for details if interested. Although the recent work of *Zhou* should be considered as a great excitement, we will still limit our classifiers within the "traditional" context in this report.
 
 ##Considerations when building our convolution based classifier
 
