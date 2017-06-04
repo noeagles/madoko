@@ -1,3 +1,4 @@
+[INCLUDE=style/lncs]
 Title         : Time Series Analysis On AirPassengers Dataset
 Author        : Li Juzheng
 Affiliation   : School of Mathematics, Sun Yet-Sen University
@@ -119,21 +120,27 @@ Training set 1.91357 16.62601 12.47854 0.4630476 5.355115
                   MASE         ACF1
 Training set 0.3895854 -0.008861853
 ```
-And the residuals are plotted in Figure 6.
+And the residuals are plotted in Figure 6. An augmented Dickey-Fuller test suggests it is stationary. This result is no surprise for in previous section we suggest that the model should be ARIMA(0,1,1) or ARIMA(1,1,1). Although the automatic method indicates the former model, we still evaluate the latter one whose also enjoys stationary residuals as shown in Figure 6. The two models are many alike, however, for simplicity, we descide the first ARIMA(0,1,1) to be our final model.
 ~ Figure
 ![F6]
 
 [F6]: images/F6.png "F6" { width:auto; max-width:90% }
+![F6-2]
+
+[F6-2]: images/F6-2.png "F6-2" { width:auto; max-width:90% }
 
 ~
 
 ```
 fit<-auto.arima(AirP, seasonal=FALSE)
 summary(fit)
-tsdisplay(residuals(fit), lag.max=144, main='(0,1,1) Model Residuals')
+tsdisplay(residuals(fit), lag.max=144, main='(0,1,1) Model Residuals') ##Figure 6
 
 fit2 = arima(AirP, order=c(1,1,1))
 summary(fit2)
-tsdisplay(residuals(fit2), lag.max=144, main='(1,1,1) Model Residuals')
+tsdisplay(residuals(fit2), lag.max=144, main='(1,1,1) Model Residuals') ##Figure 6
 ```
 
+#Conclution
+
+The procedure adopted in the report is common and easy; however, it is still a good practice of time series analysis. However, it is not necessary to adopt time series analysis techniques to datasets that appear to be time series, instead, we can view time as a variable and then process it with feature engineering techniques which can also lead to stratifying results in many cases.
