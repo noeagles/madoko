@@ -1,23 +1,12 @@
 Title         : Time Series Analysis On AirPassengers Dataset
-
 Author        : Li Juzheng
 Affiliation   : School of Mathematics, Sun Yet-Sen University
 Email         : lijzh29@mail2.sysu.edu.cn
-
-Bibliography  : example.bib
-Doc class     : [reprint,nocopyrightspace]style/sigplanconf.cls
 
 [TITLE]
 
 ~ Abstract
 In this report, we carried a time series analysis on the AirPassengers dataset. Through a series of analyses and figures, a ARIMA model was built. We also performed a validation of our model.
-~
-
-~ TexRaw
-% any commands necessary for your particular style
-\category{D.2.5}{Software Engineering}{Testing and Debugging}[symbolic execution]
-\terms{Algorithms, Experimentation}
-\keywords{Games for learning, white box testing}
 ~
 
 # Exploratory Data Analysis
@@ -66,3 +55,85 @@ plot(AirP)
 [F3]: images/F3.png "F3" { width:auto; max-width:90% }
 
 ~
+
+The trend can be dealt with ARIMA, thus we wouldn't pay special attention to it. Unequal variance does not influence much, we ignore it as well.
+
+##Stationary, PACF, ACF 
+
+Evaluating stationary can be done by `adf.test(AirP)`, and the result given by is 
+```
+
+	Augmented Dickey-Fuller Test
+
+data:  diff(AirP)
+Dickey-Fuller = -7.2275, Lag order = 5, p-value = 0.01
+alternative hypothesis: stationary
+```
+Thus the data is stationary. Details are shown in Figure 4.
+
+~ Figure
+![F4]
+
+[F4]: images/F4.png "F4" { width:auto; max-width:90% }
+~
+
+We should notice that ACF is not in the expected form due to the trend. To have a better understanding of the data for further model building, we can instead investigate the differenced data `diff(AirP)`. In Figure 5, we show its ACF and PACF. 
+
+~ Figure
+![F5-1]
+
+[F5-1]: images/F5-1.png "F5-1" { width:auto; max-width:90% }
+![F5-2]
+
+[F5-2]: images/F5-2.png "F5-2" { width:auto; max-width:90% }
+
+~
+
+We see that the suitable ARIMA for for the deseasonal data should be ARIMA(1,1,1) or ARIMA(0,1,1).
+
+```
+adf.test(AirP) ##stationary
+tsdisplay(AirP) ##Figure 4
+acf(diff(AirP)) ##Figure 5
+pacf(diff(AirP)) ##Figure 5
+```
+
+#Model building
+
+We can start by `auto.arima` to automatically calculate p and q of the ARIMA model. The basis of the model is as follows:
+```
+Series: AirP 
+ARIMA(0,1,1)                    
+
+Coefficients:
+         ma1
+      0.2006
+s.e.  0.0816
+
+sigma^2 estimated as 280.3:  log likelihood=-605.4
+AIC=1214.79   AICc=1214.88   BIC=1220.72
+
+Training set error measures:
+                  ME     RMSE      MAE       MPE     MAPE
+Training set 1.91357 16.62601 12.47854 0.4630476 5.355115
+                  MASE         ACF1
+Training set 0.3895854 -0.008861853
+```
+And the residuals are plotted in Figure 6.
+~ Figure
+![F6]
+
+[F6]: images/F6.png "F6" { width:auto; max-width:90% }
+
+~
+
+```
+fit<-auto.arima(AirP, seasonal=FALSE)
+summary(fit)
+tsdisplay(residuals(fit), lag.max=144, main='(0,1,1) Model Residuals')
+
+fit2 = arima(AirP, order=c(1,1,1))
+summary(fit2)
+tsdisplay(residuals(fit2), lag.max=144, main='(1,1,1) Model Residuals')
+```
+
