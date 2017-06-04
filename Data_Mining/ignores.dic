@@ -2,3 +2,7 @@ CIFAR
 batchnormalization
 Krizhevsky
 Zhou
+regularizers
+cifar
+AdaBoost
+overfitting

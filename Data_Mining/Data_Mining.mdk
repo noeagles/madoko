@@ -1,6 +1,6 @@
 Title         : Image Classification Practice On CIFAR-10
 Author        : Li Juzheng
-Logo          : True
+Logo          : FALSE
 
 [TITLE]
 
@@ -13,7 +13,7 @@ See Figure 1 for a primary understanding.
 ~ Figure { caption: This Figure is a copy from <https://www.kaggle.com/c/cifar-10>}
 ![cifar-10]
 
-[cifar-10]: images/cifar-10.png "cifar-10" { width:auto; max-width:90% }
+[cifar-10]: images/cifar-10.png "cifar-10" { width:auto; max-width:50% }
 
 ~ 
 
@@ -25,4 +25,36 @@ The best classifiers for images so far are mostly built with convolution neural 
 
 ##Considerations when building our convolution based classifier
 
-Is there a universal or general guideline for building deep neural networks? Someone may argue that there is one and it has been found by him, but I hold strong disbelief about this. However, some interesting work has been carried out by *Johnson et al.* in their paper [Inferring and Executing Programs for Visual Reasoning](https://arxiv.org/pdf/1705.03633.pdf).
+Is there a universal or general guideline for building deep neural networks? Someone may argue that there is one and it has been found by him, but I hold strong disbelief about this. However, some interesting work related to this topic has been carried out by *Johnson et al.* in their paper [Inferring and Executing Programs for Visual Reasoning](https://arxiv.org/pdf/1705.03633.pdf). 
+
+Although we are now not equipped with a certain guideline, there are some empirical principles we might follow when designing the general architecture (further parameter tuning is a total different story!) of the network:
+
+* Given the same units, we should choose deeper models over wider models;
+* When the model became sufficient complex, regularizers, in a lager sense, should be taken into considerations;
+* When lacking of domain knowledge, which is often the case, use the rectified linear unit and its variants as the default choices for activation function. 
+
+There is no, as mentioned before, by now universal guidelines for designing architectures, and the above "principles" are merely my humble immature opinions. In practice, the design must always be task-driven to achieve a maximum effect.
+
+## Deep convolution neural network
+
+We begin our work by first building a simple, intuitive but quite useful and effective deep convolution classifier where we perform the convolution operation continuously, that is, we do so without applying pooling. Such a procedure can in a way functions as pooling itself.
+
+## Transfer learning
+
+As we have mentioned before, the convolution part can be viewed as a feature extractor that maps images into vectors (i.e. the output of the flatten layer). In that prospective we may not have to train the convolution part with our limited data, but rather to use a well-trained convolution that have already obtained the knowledge related to our dataset. By using such a trained convolution, we can then focus on the dense part that maps a vector to a class label. 
+
+## Ensemble neural networks using AdaBoost
+
+This section is the creative part of our report.
+
+Assuming we already have the mapped features of the images in the dataset, all we need to do is then train a good classifier; this is in corresponding to the former section. However, rather than training a single dense layer, we can introduce the ides of ensemble into networks. And the AdaBoost is an excellent choice of ensemble algorithm for it has a guarantee that the final model is no worse than any single model used to ensemble it.
+
+#Further
+
+A good feature extractor is hard to find or train meaning that we cannot find a well trained one for our dataset; however, when assembling, it would be unwise to train a extractor for each model for the following reasons:
+
+* It is computational expensive to do so;
+* Even with weights, the features of given images should remain invariant;
+* This is directly against the idea of parameter sharing and is easy to lead to overfitting.
+
+Thus a problem arises for such a ensemble method: how should we change the convolution part accordingly? Perhaps the easiest way is to train it on the unweighted dataset and then hold it constant/frozen for the rest. Is there any other way such as modify it slightly every step in boosting so that as we obtaining a better classifier we can also refine our extractor? A simple solution to that is we "fine-tune" the network at each step. 
