@@ -1,4 +1,4 @@
-Title         : Image Classification Practice On CIFAR-10
+Title         : Thoughts and Practice of Image Classification on CIFAR-10 
 Author        : Li Juzheng
 Logo          : FALSE
 
@@ -37,24 +37,269 @@ There is no, as mentioned before, by now universal guidelines for designing arch
 
 ## Deep convolution neural network
 
-We begin our work by first building a simple, intuitive but quite useful and effective deep convolution classifier where we perform the convolution operation continuously, that is, we do so without applying pooling. Such a procedure can in a way functions as pooling itself.
+We begin our work by first building a simple, intuitive but quite useful and effective deep convolution classifier where we perform the convolution operation continuously, that is, we do so without applying pooling. Such a procedure can in a way functions as pooling itself. The accury in test set is 78%, a quite satisfying result given the time and the hardware we have. 
+It can be improved with:
 
-## Transfer learning
+* More epochs
+* Deeper model
+* Data augmentation
+* More Regularization
 
-As we have mentioned before, the convolution part can be viewed as a feature extractor that maps images into vectors (i.e. the output of the flatten layer). In that prospective we may not have to train the convolution part with our limited data, but rather to use a well-trained convolution that have already obtained the knowledge related to our dataset. By using such a trained convolution, we can then focus on the dense part that maps a vector to a class label. 
+## Fine-tuning and a transfer learning view
 
-## Ensemble neural networks using AdaBoost
+As we have mentioned before, the convolution part can be viewed as a feature extractor that maps images into vectors (i.e. the output of the flatten layer). In that prospective we may not have to train the convolution part with our limited data, but rather to use a well-trained convolution that have already obtained the knowledge related to our dataset. By using such a trained convolution, we can then focus on the dense part that maps a vector to a class label. It has been argued that fine-tuning is not a transfer learning process since it has no "model"; however, fine-tuning does share a lot similarities with the parameter approach and representation approach in transfer learning because parameters are shared/we assume that images of different distribution can be represented through the same convolution part.
 
-This section is the creative part of our report.
+#Some Thoughts
 
-Assuming we already have the mapped features of the images in the dataset, all we need to do is then train a good classifier; this is in corresponding to the former section. However, rather than training a single dense layer, we can introduce the ides of ensemble into networks. And the AdaBoost is an excellent choice of ensemble algorithm for it has a guarantee that the final model is no worse than any single model used to ensemble it.
+This section is the novel part of our report where we propose some new ideas that has been testified in our previous study.
 
-#Further
+## Ensemble neural networks using AdaBoost and further thoughts
 
-A good feature extractor is hard to find or train meaning that we cannot find a well trained one for our dataset; however, when assembling, it would be unwise to train a extractor for each model for the following reasons:
+Assuming we already have the mapped features of the images in the dataset, all we need to do is then train a good classifier; this is in corresponding to the former section. However, rather than training a single dense layer, we can introduce the idea of ensemble into networks. And the AdaBoost is an excellent choice of ensemble algorithm for it has a guaranty that the final model is no worse than any single model used to ensemble it.
+
+A good feature extractor is hard to find or train meaning that we cannot find a well trained one for our dataset; however, when using ensemble, it would be unwise to train a extractor for each model for the following reasons:
 
 * It is computational expensive to do so;
 * Even with weights, the features of given images should remain invariant;
 * This is directly against the idea of parameter sharing and is easy to lead to overfitting.
 
-Thus a problem arises for such a ensemble method: how should we change the convolution part accordingly? Perhaps the easiest way is to train it on the unweighted dataset and then hold it constant/frozen for the rest. Is there any other way such as modify it slightly every step in boosting so that as we obtaining a better classifier we can also refine our extractor? A simple solution to that is we "fine-tune" the network at each step. 
+Thus a problem arises for such a ensemble method: how should we change the convolution part accordingly? Perhaps the easiest way is to train it on the unweighted dataset and then hold it constant/frozen for the rest. Is there any other way such as modify it slightly every step in boosting so that as we obtaining a better classifier we can also refine our extractor? A simple solution to it may be that we "fine-tune" the network at each step. 
+
+##Balance between the convolution part and the fully-connected part
+
+This section was not included in the first draft for that we at that time cannot find an activation function that can guarantee a converge of networks. However, with recently proposed SNNs, it is possible to adjust the balance between the convolution part and the fully-connected part. Well-known convolution networks like VGG16, VGG19 all have a relatively shallow FNN, the intuition behind such doing is simple: FNNs often suffer from gradient vanish or explosion and a deep convolution can offer certain information of interest such styling in neuron art. However, training deep convolution is computational expensive and often rely on hardwares thus cannot be done in mobile devices. Put the gradient vanish/explosion problem aside, it is reasonable to use a combination of shallow Conv and deep FNN, where the former functions as a primary feature extractor while the latter functions as a powerful classier. Now, with SNNs the gradient vanish/explosion problem becomes tangible, we may want to change the guidelines when designing convolution networks in some situations.
+
+#Conclusion, or a simple finishing
+
+In this report, we performed a image classification using CIFAR-10 with two routine approaches, and discussed some noval idea regarding building networks. Hopefully, it can be of some use.
+
+#Code for classifiers
+
+Code for Deep Conv using keras:
+
+```python
+from __future__ import print_function
+import keras
+from keras.datasets import cifar10
+from keras.models import Sequential
+from keras.layers import Dense, Dropout, Activation, Flatten
+from keras.layers import Conv2D, MaxPooling2D
+
+batch_size = 128
+num_classes = 10
+epochs = 20
+
+(x_train, y_train), (x_test, y_test) = cifar10.load_data()
+print('x_train shape:', x_train.shape)
+print(x_train.shape[0], 'train samples')
+print(x_test.shape[0], 'test samples')
+
+y_train = keras.utils.to_categorical(y_train, num_classes)
+y_test = keras.utils.to_categorical(y_test, num_classes)
+
+model = Sequential()
+
+model.add(Conv2D(32, (3, 3), padding='same',
+                 input_shape=x_train.shape[1:]))
+model.add(Activation('relu'))
+model.add(Conv2D(32, (3, 3)))
+model.add(Activation('relu'))
+model.add(Conv2D(32, (3, 3)))
+model.add(Activation('relu'))
+model.add(MaxPooling2D(pool_size=(2, 2)))
+model.add(Dropout(0.25))
+
+model.add(Conv2D(64, (3, 3), padding='same'))
+model.add(Activation('relu'))
+model.add(Conv2D(64, (3, 3)))
+model.add(Activation('relu'))
+model.add(MaxPooling2D(pool_size=(2, 2)))
+model.add(Dropout(0.25))
+
+model.add(Flatten())
+model.add(Dense(1024))
+model.add(Activation('relu'))
+model.add(Dense(num_classes))
+model.add(Activation('softmax'))
+
+opt = keras.optimizers.Adam(lr=0.001, 
+beta_1=0.9, beta_2=0.999, epsilon=1e-08)
+model.compile(loss='categorical_crossentropy',
+              optimizer=opt,
+              metrics=['accuracy'])
+x_train = x_train.astype('float32')
+x_test = x_test.astype('float32')
+x_train /= 255
+x_test /= 255
+model.fit(x_train, 
+y_train,batch_size=batch_size,epochs=epochs,
+validation_data=(x_test, y_test),shuffle=True)
+
+print(model.evaluate(x_test, y_test, batch_size=batch_size))
+```
+
+Code for fine-tuning using keras
+```python
+import keras
+import math
+from keras.datasets import cifar10
+from keras.models import Sequential
+from keras.layers import Dense, Dropout, Activation, Flatten
+from keras.layers import Conv2D, MaxPooling2D
+from keras.initializers import RandomNormal
+from keras import optimizers
+from keras.layers.normalization import BatchNormalization
+from keras.utils.data_utils import get_file
+
+weight_init = 0.0005
+batch_size = 128
+num_classes = 10
+epochs = 20
+dropout = 0.5
+
+def get_he_weight(k,c):
+    return math.sqrt(2/(k*k*c))
+
+(x_train, y_train), (x_test, y_test) = cifar10.load_data()
+print('x_train shape:', x_train.shape)
+print(x_train.shape[0], 'train samples')
+print(x_test.shape[0], 'test samples')
+
+y_train = keras.utils.to_categorical(y_train, num_classes)
+y_test = keras.utils.to_categorical(y_test, num_classes)
+
+WEIGHTS_PATH = 
+'https://github.com/fchollet/deep-learning-models/releases/download/v0.1/vgg19_weights_tf_dim_ordering_tf_kernels.h5'
+path = get_file('vgg19_weights_tf_dim_ordering_tf_kernels.h5', WEIGHTS_PATH, cache_subdir='weight')
+
+x_train = x_train.astype('float32')
+x_test = x_test.astype('float32')
+x_train /= 255
+x_test /= 255
+
+model = Sequential()
+# Block 1
+model.add(Conv2D(64, (3, 3), padding='same', 
+kernel_regularizer=keras.regularizers.l2(weight_init), 
+kernel_initializer=RandomNormal(stddev = get_he_weight(3,64)), 
+name='block1_conv1', input_shape=x_train.shape[1:]))
+model.add(BatchNormalization())
+model.add(Activation('relu'))
+model.add(Conv2D(64, (3, 3), padding='same', 
+kernel_regularizer=keras.regularizers.l2(weight_init),
+ kernel_initializer=RandomNormal(stddev = get_he_weight(3,64)), name='block1_conv2'))
+model.add(BatchNormalization())
+model.add(Activation('relu'))
+model.add(MaxPooling2D((2, 2), strides=(2, 2), name='block1_pool'))
+
+# Block 2
+model.add(Conv2D(128, (3, 3), padding='same', 
+kernel_regularizer=keras.regularizers.l2(weight_init),
+ kernel_initializer=RandomNormal(stddev = get_he_weight(3,128)),
+  name='block2_conv1'))
+model.add(BatchNormalization())
+model.add(Activation('relu'))
+model.add(Conv2D(128, (3, 3), padding='same', 
+kernel_regularizer=keras.regularizers.l2(weight_init),
+ kernel_initializer=RandomNormal(stddev = get_he_weight(3,128)), name='block2_conv2'))
+model.add(BatchNormalization())
+model.add(Activation('relu'))
+model.add(MaxPooling2D((2, 2), strides=(2, 2), name='block2_pool'))
+
+# Block 3
+model.add(Conv2D(256, (3, 3), padding='same',
+ kernel_regularizer=keras.regularizers.l2(weight_init), 
+ kernel_initializer=RandomNormal(stddev = get_he_weight(3,256)), name='block3_conv1'))
+model.add(BatchNormalization())
+model.add(Activation('relu'))
+model.add(Conv2D(256, (3, 3), padding='same', 
+kernel_regularizer=keras.regularizers.l2(weight_init),
+ kernel_initializer=RandomNormal(stddev = get_he_weight(3,256)), name='block3_conv2'))
+model.add(BatchNormalization())
+model.add(Activation('relu'))
+model.add(Conv2D(256, (3, 3), padding='same',
+ kernel_regularizer=keras.regularizers.l2(weight_init), 
+ kernel_initializer=RandomNormal(stddev = get_he_weight(3,256)), name='block3_conv3'))
+model.add(BatchNormalization())
+model.add(Activation('relu'))
+model.add(Conv2D(256, (3, 3), padding='same',
+ kernel_regularizer=keras.regularizers.l2(weight_init), 
+ kernel_initializer=RandomNormal(stddev = get_he_weight(3,256)), name='block3_conv4'))
+model.add(BatchNormalization())
+model.add(Activation('relu'))
+model.add(MaxPooling2D((2, 2), strides=(2, 2), name='block3_pool'))
+
+# Block 4
+model.add(Conv2D(512, (3, 3), padding='same', 
+kernel_regularizer=keras.regularizers.l2(weight_init), 
+kernel_initializer=RandomNormal(stddev = get_he_weight(3,512)), name='block4_conv1'))
+model.add(BatchNormalization())
+model.add(Activation('relu'))
+model.add(Conv2D(512, (3, 3), padding='same',
+ kernel_regularizer=keras.regularizers.l2(weight_init),
+  kernel_initializer=RandomNormal(stddev = get_he_weight(3,512)), name='block4_conv2'))
+model.add(BatchNormalization())
+model.add(Activation('relu'))
+model.add(Conv2D(512, (3, 3), padding='same', 
+kernel_regularizer=keras.regularizers.l2(weight_init), 
+kernel_initializer=RandomNormal(stddev = get_he_weight(3,512)), name='block4_conv3'))
+model.add(BatchNormalization())
+model.add(Activation('relu'))
+model.add(Conv2D(512, (3, 3), padding='same', 
+kernel_regularizer=keras.regularizers.l2(weight_init),
+ kernel_initializer=RandomNormal(stddev = get_he_weight(3,512)), name='block4_conv4'))
+model.add(BatchNormalization())
+model.add(Activation('relu'))
+model.add(MaxPooling2D((2, 2), strides=(2, 2), name='block4_pool'))
+
+# Block 5
+model.add(Conv2D(512, (3, 3), padding='same', 
+kernel_regularizer=keras.regularizers.l2(weight_init), 
+kernel_initializer=RandomNormal(get_he_weight(3,512)), name='block5_conv1'))
+model.add(BatchNormalization())
+model.add(Activation('relu'))
+model.add(Conv2D(512, (3, 3), padding='same', 
+kernel_regularizer=keras.regularizers.l2(weight_init), 
+kernel_initializer=RandomNormal(get_he_weight(3,512)), name='block5_conv2'))
+model.add(BatchNormalization())
+model.add(Activation('relu'))
+model.add(Conv2D(512, (3, 3), padding='same', 
+kernel_regularizer=keras.regularizers.l2(weight_init),
+ kernel_initializer=RandomNormal(get_he_weight(3,512)), name='block5_conv3'))
+model.add(BatchNormalization())
+model.add(Activation('relu'))
+model.add(Conv2D(512, (3, 3), padding='same', 
+kernel_regularizer=keras.regularizers.l2(weight_init),
+ kernel_initializer=RandomNormal(get_he_weight(3,512)), name='block5_conv4'))
+model.add(BatchNormalization())
+model.add(Activation('relu'))
+
+# model modification for cifar-10
+model.add(Flatten(name='flatten'))
+model.add(Dense(4096, use_bias = True, 
+kernel_regularizer=keras.regularizers.l2(weight_init), 
+kernel_initializer=RandomNormal(stddev = 0.01), name='fc_cifa10'))
+model.add(BatchNormalization())
+model.add(Activation('relu'))
+model.add(Dropout(dropout))
+model.add(Dense(4096, kernel_regularizer=keras.regularizers.l2(weight_init),
+ kernel_initializer=RandomNormal(stddev = 0.01), name='fc2'))
+model.add(BatchNormalization())
+model.add(Activation('relu'))
+model.add(Dropout(dropout))
+model.add(Dense(10, kernel_regularizer=keras.regularizers.l2(weight_init),
+ kernel_initializer=RandomNormal(stddev = 0.01), name='predictions_cifa10'))
+model.add(BatchNormalization())
+model.add(Activation('softmax'))
+
+# load pretrained weight from VGG19 by name
+model.load_weights(path, by_name=True)
+
+sgd = optimizers.SGD(lr=.1, momentum=0.9, nesterov=True, decay= 0.001)
+model.compile(loss='categorical_crossentropy', 
+optimizer=sgd, metrics=['accuracy'])
+model.fit(x_train,
+ y_train,
+ batch_size=batch_size,epochs=epochs,
+ validation_data=(x_test, y_test),shuffle=True)
+```

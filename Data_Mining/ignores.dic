@@ -6,3 +6,6 @@ regularizers
 cifar
 AdaBoost
 overfitting
+ensembling
+SNNs
+FNN
